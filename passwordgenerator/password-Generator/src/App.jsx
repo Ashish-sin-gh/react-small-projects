@@ -1,36 +1,39 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 function App() {
-  const [length, setlength] = useState(8)
-  const [password,setPassword] = useState("password");
+  const [length, setLength] = useState(8);
   const [character, setCharacter] = useState(false);
   const [number, setNumber] = useState(false);
+  const [password,setPassword] = useState("password");
 
-  const passGen = useCallback(()=>{
+  const genPass = useCallback(()=>{
     let pass = "";
     let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     if(character){
-      str += ",.'/!@#$%^&*_+=()~`?:";
+      str += "~`!@#$%^&*()_+=-{}[]|',./?"
     }
     if(number){
-      str +=  "0123456789"
+      str += "0123456789";
     }
-    for(let i = 1; i <= length; i++){
-      const char = Math.floor(Math.random() * str.length + 1) ;
-      pass = pass + str.charAt(char); 
+
+    for(let i=1; i<=length; i++){
+      const charIndex = Math.floor(Math.random() * str.length + 1);
+      pass = pass + str.charAt(charIndex);  
     }
+
     setPassword(pass);
-  }, [length, character, number, setPassword]);
+  },[length, character, number, password])
 
-  //copy password using useRef
-  const passReference = useRef(null);
+  useEffect(()=>{
+    genPass();
+  },[length,character,number,setPassword])
 
+  //copy password
+  const passRef = useRef(null);
   const copyToClipBoard = useCallback(()=>{
-    passReference.current?.select();
+    passRef.current?.select();
     window.navigator.clipboard.writeText(password);
-  },[password]);
-
-  useEffect(()=>passGen(),[length,character,number,passGen]);
+  },[password])
 
   return (
     <>
@@ -42,7 +45,7 @@ function App() {
           <label htmlFor="slider" className='text-2xl mr-1'>length of password: {length} </label>
 
           <input id="slider" type='range' value={length} min={8} max={16} className='cursor-pointer w-[50%]'
-          onChange={(e)=>setlength(e.target.value)}/>
+          onChange={(e)=>setLength(e.target.value)}/>
         </div>
 
         <div className='flex flex-wrap items-center gap-5'>
@@ -61,8 +64,8 @@ function App() {
           }}/>
         </div>
 
-        <div className='flex gap-5 items-center w-[100%]'>
-          <input type="text" value={password} id="password-op" className='outline-none border-2 border-gray-700 text-2xl text-gray-500 px-4 py-2 rounded-2xl grow shadow-lg read-only:' ref={passReference}  />
+        <div className='flex gap-5 flex-wrap items-center w-[100%]'>
+          <input type="text" value={password} id="password-op" className='outline-none border-2 border-gray-700 text-2xl text-gray-500 px-4 py-2 rounded-2xl grow shadow-lg read-only:' ref={passRef}  />
 
           <button className='px-6 py-2 text-2xl bg-red-500  text-white rounded-2xl hover:scale-105 duration-75 hover:shadow-lg' onClick={copyToClipBoard}>COPY</button>
         </div>

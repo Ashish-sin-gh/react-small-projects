@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       backgroundImage: {
-        'main': "url(https://images.pexels.com/photos/16886243/pexels-photo-16886243/free-photo-of-banknotes-of-different-denominations-cash-dolors.jpeg?auto=compress&cs=tinysrgb&w=600)"
+        'main': "url(https://images.pexels.com/photos/730547/pexels-photo-730547.jpeg?auto=compress&cs=tinysrgb&w=600)"
       },
       fontFamily: {
         poppins: ['Poppins', 'sans-serif']
